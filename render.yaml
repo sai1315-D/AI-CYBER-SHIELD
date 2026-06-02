@@ -1,0 +1,16 @@
+services:
+  - type: web_service
+    name: ai-cyber-shield-backend
+    env: python
+    plan: free
+    rootDir: "AI Cyber Shield/backend"
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+  - type: static_site
+    name: ai-cyber-shield-frontend
+    env: static
+    plan: free
+    rootDir: "AI Cyber Shield/frontend"
+    buildCommand: npm install && npm run build
+    publishPath: dist
