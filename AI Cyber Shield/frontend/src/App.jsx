@@ -20,6 +20,21 @@ const particles = Array.from({ length: 34 }, (_, index) => ({
   delay: -(index % 8)
 }));
 
+const dataStreams = Array.from({ length: 18 }, (_, index) => ({
+  id: index,
+  left: `${(index * 17 + 5) % 100}%`,
+  delay: -(index * 0.45),
+  duration: 5 + (index % 5)
+}));
+
+const hexNodes = Array.from({ length: 8 }, (_, index) => ({
+  id: index,
+  left: `${8 + ((index * 13) % 78)}%`,
+  top: `${12 + ((index * 19) % 72)}%`,
+  size: 58 + (index % 3) * 18,
+  delay: -(index * 0.65)
+}));
+
 const cards = [
   {
     title: "Upload Image",
@@ -82,6 +97,83 @@ function Background() {
     <div className="pointer-events-none fixed inset-0 overflow-hidden bg-slate-950">
       <div className="absolute inset-0 bg-cyber-grid bg-[length:34px_34px] opacity-40" />
       <div className="absolute inset-0 bg-[linear-gradient(120deg,rgba(20,184,166,0.16),transparent_30%,rgba(59,130,246,0.12)_58%,transparent_78%)]" />
+      <svg className="absolute inset-0 h-full w-full opacity-35" aria-hidden="true">
+        <defs>
+          <linearGradient id="networkLine" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0%" stopColor="rgba(45, 212, 191, 0)" />
+            <stop offset="50%" stopColor="rgba(103, 232, 249, 0.55)" />
+            <stop offset="100%" stopColor="rgba(59, 130, 246, 0)" />
+          </linearGradient>
+        </defs>
+        <motion.path
+          d="M 80 180 C 240 90, 340 260, 520 150 S 830 120, 980 250 S 1180 360, 1360 190"
+          fill="none"
+          stroke="url(#networkLine)"
+          strokeWidth="1"
+          strokeDasharray="10 18"
+          animate={{ strokeDashoffset: [0, -120], opacity: [0.15, 0.55, 0.15] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.path
+          d="M 40 560 C 210 430, 390 620, 560 500 S 880 390, 1040 520 S 1220 690, 1400 560"
+          fill="none"
+          stroke="url(#networkLine)"
+          strokeWidth="1"
+          strokeDasharray="6 16"
+          animate={{ strokeDashoffset: [0, 110], opacity: [0.12, 0.48, 0.12] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        />
+      </svg>
+      <div className="absolute right-[-120px] top-[-120px] h-[420px] w-[420px] rounded-full border border-cyan-200/10">
+        <motion.div
+          className="absolute left-1/2 top-1/2 h-1/2 w-px origin-top bg-gradient-to-b from-cyan-200/60 to-transparent"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+        />
+        <motion.div
+          className="absolute inset-16 rounded-full border border-teal-200/10"
+          animate={{ scale: [0.96, 1.04, 0.96], opacity: [0.35, 0.7, 0.35] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+      {dataStreams.map((stream) => (
+        <motion.div
+          key={stream.id}
+          className="absolute top-[-22%] h-28 w-px bg-gradient-to-b from-transparent via-teal-200/35 to-transparent"
+          style={{ left: stream.left }}
+          animate={{ y: ["0vh", "128vh"], opacity: [0, 0.65, 0] }}
+          transition={{
+            duration: stream.duration,
+            delay: stream.delay,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      ))}
+      {hexNodes.map((hex) => (
+        <motion.div
+          key={hex.id}
+          className="absolute border border-cyan-200/10 bg-cyan-200/[0.015]"
+          style={{
+            left: hex.left,
+            top: hex.top,
+            width: hex.size,
+            height: hex.size,
+            clipPath: "polygon(50% 0%, 92% 25%, 92% 75%, 50% 100%, 8% 75%, 8% 25%)"
+          }}
+          animate={{
+            rotate: [0, 60, 120],
+            opacity: [0.12, 0.38, 0.12],
+            scale: [0.96, 1.04, 0.96]
+          }}
+          transition={{
+            duration: 12,
+            delay: hex.delay,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      ))}
       {particles.map((particle) => (
         <motion.span
           key={particle.id}
